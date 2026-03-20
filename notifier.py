@@ -137,6 +137,15 @@ def notify_startup(paper: bool) -> None:
 #         _send("\n".join(lines))
 
 
+def notify_no_trade(minutes: int = 1) -> None:
+    """Sent periodically when no trade has been executed in the last `minutes` minutes."""
+    _send(
+        f"🔍 <b>No Trade in Last {minutes} Min</b>\n"
+        f"No entry was triggered in the last {minutes} minutes.\n"
+        f"Bot is actively scanning the market — standing by for the next signal."
+    )
+
+
 def notify_position_update(symbol: str, opt_type: str, strike: float,
                             entry: float, ltp: float, pnl: float, sl: float, tgt: float) -> None:
     """Periodic update for an open position."""

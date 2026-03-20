@@ -79,6 +79,10 @@ logger = logging.getLogger("main")
 _pending:   dict = {}
 _confirmed: dict = {}
 
+# ── No-trade alert state (set properly in main()) ─────────────────────────────
+last_trade_time     = 0.0
+last_no_trade_alert = 0.0
+
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -232,6 +236,12 @@ def _execute_confirmed_signal(symbol: str, entry: dict) -> None:
             )
 
             logger.info(f"[ENTRY] {symbol} {signal.signal} → trade placed")
+
+            # Reset the no-trade timer so the 30-min alert won't fire
+            # immediately after a real entry
+            global last_trade_time, last_no_trade_alert
+            last_trade_time     = time.time()
+            last_no_trade_alert = time.time()
 
     except RiskViolation as e:
         logger.warning(f"Risk block {symbol}: {e}")
@@ -434,7 +444,11 @@ def main() -> None:
         f"Tick check every {config.TICK_INTERVAL}s"
     )
 
-    last_candle_scan = 0.0
+    global last_trade_time, last_no_trade_alert
+    last_candle_scan     = 0.0
+    last_trade_time      = time.time()
+    last_no_trade_alert  = time.time()
+    NO_TRADE_ALERT_SECS  = 30 * 60
 
     try:
         while _is_market_open():
@@ -456,6 +470,13 @@ def main() -> None:
 
             # ── Fast loop: real-time entry timing + position monitor ──────────
             run_tick_check()
+
+            # ── 30-min no-trade Telegram alert ───────────────────────────────
+            if (now - last_trade_time    >= NO_TRADE_ALERT_SECS and
+                    now - last_no_trade_alert >= NO_TRADE_ALERT_SECS):
+                notifier.notify_no_trade(minutes=30)
+                last_no_trade_alert = now
+
             time.sleep(config.TICK_INTERVAL)
 
     except KeyboardInterrupt:
