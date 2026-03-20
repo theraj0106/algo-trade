@@ -42,5 +42,4 @@ jobs:
 
             echo "Restart bot"
             sudo systemctl restart algobot
-
             echo "Deployment done"
