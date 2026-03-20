@@ -447,8 +447,8 @@ def main() -> None:
     global last_trade_time, last_no_trade_alert
     last_candle_scan     = 0.0
     last_trade_time      = time.time()
-    last_no_trade_alert  = time.time()
-    NO_TRADE_ALERT_SECS  = 30 * 60
+    last_no_trade_alert  = 0.0            # fire first alert after 1 min from start
+    NO_TRADE_ALERT_SECS  = 1 * 60        # 1 minute
 
     try:
         while _is_market_open():
@@ -471,7 +471,7 @@ def main() -> None:
             # ── Fast loop: real-time entry timing + position monitor ──────────
             run_tick_check()
 
-            # ── 30-min no-trade Telegram alert ───────────────────────────────
+            # ── 1-min no-trade Telegram alert ────────────────────────────────
             if (now - last_trade_time    >= NO_TRADE_ALERT_SECS and
                     now - last_no_trade_alert >= NO_TRADE_ALERT_SECS):
                 notifier.notify_no_trade(minutes=1)
