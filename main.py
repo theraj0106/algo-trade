@@ -448,7 +448,7 @@ def main() -> None:
     last_candle_scan     = 0.0
     last_trade_time      = time.time()
     last_no_trade_alert  = 0.0            # fire first alert after 1 min from start
-    NO_TRADE_ALERT_SECS  = 1 * 60        # 1 minute
+    NO_TRADE_ALERT_SECS  = 1 * 60 * 30      # 30 minute
 
     try:
         while _is_market_open():

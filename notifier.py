@@ -137,7 +137,7 @@ def notify_startup(paper: bool) -> None:
 #         _send("\n".join(lines))
 
 
-def notify_no_trade(minutes: int = 1) -> None:
+def notify_no_trade(minutes: int = 30) -> None:
     """Sent periodically when no trade has been executed in the last `minutes` minutes."""
     _send(
         f"🔍 <b>No Trade in Last {minutes} Min</b>\n"
