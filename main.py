@@ -474,7 +474,7 @@ def main() -> None:
             # ── 30-min no-trade Telegram alert ───────────────────────────────
             if (now - last_trade_time    >= NO_TRADE_ALERT_SECS and
                     now - last_no_trade_alert >= NO_TRADE_ALERT_SECS):
-                notifier.notify_no_trade(minutes=30)
+                notifier.notify_no_trade(minutes=1)
                 last_no_trade_alert = now
 
             time.sleep(config.TICK_INTERVAL)
