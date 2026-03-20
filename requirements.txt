@@ -1,0 +1,14 @@
+# Core broker API
+upstox-python-sdk>=2.9.0
+
+# Fallback data (paper trade / backtesting)
+yfinance>=0.2.38
+
+# Data & ML
+pandas>=2.0.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+
+# Utilities
+python-dotenv>=1.0.0
+requests>=2.31.0
