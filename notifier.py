@@ -117,7 +117,7 @@ def notify_startup(paper: bool) -> None:
     nse_syms = [s for s in config.WATCHLIST if s not in config.UPSTOX_COMMODITY_KEYS]
     mcx_syms = [s for s in config.WATCHLIST if s in config.UPSTOX_COMMODITY_KEYS]
     msg = (
-        f"🚀 <b>AI F&O AlgoBot started  [{mode}]</b>\n"
+        f"🚀 <b>AI F&O AlgoBot Started  [{mode}] 🚀 </b>\n"
         f"NSE/BSE  : <code>{', '.join(nse_syms)}</code>\n"
         f"MCX      : <code>{', '.join(mcx_syms)}</code>\n"
         f"Scan every : {config.SCAN_INTERVAL}s candle  |  {config.TICK_INTERVAL}s tick\n"
