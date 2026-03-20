@@ -1,0 +1,46 @@
+name: Deploy Trading Bot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          script: |
+            set -e
+
+            cd /algo-trade
+
+            echo "Pull latest code"
+            git fetch origin
+            git reset --hard origin/main
+
+            echo "Setup venv if missing"
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+
+            source venv/bin/activate
+
+            echo "Install dependencies"
+            pip install --upgrade pip
+            pip install -r requirements.txt
+
+            echo "Ensure folders exist"
+            mkdir -p logs data
+
+            echo "Restart bot"
+            sudo systemctl restart algobot
+
+            echo "Deployment done"
